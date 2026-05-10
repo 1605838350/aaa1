@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="zipFolderTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F8CF79"/>
+      <stop offset="1" stop-color="#E4B65A"/>
+    </linearGradient>
+    <linearGradient id="zipFolderBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EDBE65"/>
+      <stop offset="1" stop-color="#D79E40"/>
+    </linearGradient>
+  </defs>
+  <path d="M7 19a4 4 0 0 1 4-4h13.5l4.2 4.2H53a4 4 0 0 1 4 4v5H7z" fill="url(#zipFolderTop)" stroke="#C68F37"/>
+  <rect x="7" y="24" width="50" height="33" rx="4" fill="url(#zipFolderBody)" stroke="#C68F37"/>
+  <rect x="26.8" y="19" width="10.8" height="5.2" rx="1.6" fill="#F7DAA1"/>
+  <rect x="29" y="23" width="6" height="28.5" rx="1.3" fill="#B8BBC1" stroke="#8C8F94" stroke-width="0.8"/>
+  <g fill="#F5F6F7" stroke="#8D8F94" stroke-width="0.45">
+    <rect x="29.7" y="25" width="4.6" height="1.9" rx="0.5"/>
+    <rect x="29.7" y="28.7" width="4.6" height="1.9" rx="0.5"/>
+    <rect x="29.7" y="32.4" width="4.6" height="1.9" rx="0.5"/>
+    <rect x="29.7" y="36.1" width="4.6" height="1.9" rx="0.5"/>
+    <rect x="29.7" y="39.8" width="4.6" height="1.9" rx="0.5"/>
+    <rect x="29.7" y="43.5" width="4.6" height="1.9" rx="0.5"/>
+    <rect x="29.7" y="47.2" width="4.6" height="1.9" rx="0.5"/>
+  </g>
+  <rect x="27.5" y="51" width="9" height="4.6" rx="1.2" fill="#8F44B0"/>
+  <text x="32" y="54" text-anchor="middle" font-family="Segoe UI, Arial" font-size="3" font-weight="700" fill="#FFFFFF">ZIP</text>
+</svg>

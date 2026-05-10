@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.StuHomeworkSubmitMapper">
+
+    <resultMap type="StuHomeworkSubmit" id="StuHomeworkSubmitResult">
+        <result property="submitId"     column="submit_id"     />
+        <result property="homeworkId"   column="homework_id"   />
+        <result property="studentId"    column="student_id"    />
+        <result property="fileName"     column="file_name"     />
+        <result property="filePath"     column="file_path"     />
+        <result property="submitTime"   column="submit_time"   />
+        <result property="score"        column="score"         />
+        <result property="comment"      column="comment"       />
+        <result property="status"       column="status"        />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateTime"   column="update_time"   />
+        <result property="studentName"  column="student_name"  />
+        <result property="account"      column="account"       />
+        <result property="homeworkTitle" column="homework_title" />
+    </resultMap>
+
+    <sql id="selectStuHomeworkSubmitVo">
+        select s.submit_id, s.homework_id, s.student_id, s.file_name,
+               CONCAT(h.storage_path, '/', s.file_name) as file_path,
+               s.submit_time, s.score, s.comment, s.status, s.create_time, s.update_time,
+               st.student_name, st.account, h.title as homework_title
+        from stu_homework_submit s
+        left join stu_student st on st.student_id = s.student_id
+        left join stu_homework h on h.homework_id = s.homework_id
+    </sql>
+
+    <select id="selectStuHomeworkSubmitList" parameterType="StuHomeworkSubmit" resultMap="StuHomeworkSubmitResult">
+        <include refid="selectStuHomeworkSubmitVo"/>
+        where 1=1
+        <if test="submitId != null">
+            AND s.submit_id = #{submitId}
+        </if>
+        <if test="homeworkId != null">
+            AND s.homework_id = #{homeworkId}
+        </if>
+        <if test="studentId != null">
+            AND s.student_id = #{studentId}
+        </if>
+        <if test="status != null and status != ''">
+            AND s.status = #{status}
+        </if>
+        <if test="studentName != null and studentName != ''">
+            AND st.student_name like concat('%', #{studentName}, '%')
+        </if>
+        <if test="admissionYear != null">
+            AND st.admission_year = #{admissionYear}
+        </if>
+        <if test="classNum != null">
+            AND st.class_num = #{classNum}
+        </if>
+        order by s.submit_time desc
+    </select>
+
+    <select id="selectByStudentAndHomework" resultMap="StuHomeworkSubmitResult">
+        <include refid="selectStuHomeworkSubmitVo"/>
+        where s.student_id = #{studentId} and s.homework_id = #{homeworkId}
+    </select>
+
+    <insert id="insertStuHomeworkSubmit" parameterType="StuHomeworkSubmit" useGeneratedKeys="true" keyProperty="submitId">
+        insert into stu_homework_submit (
+            homework_id,
+            student_id,
+            file_name,
+            submit_time,
+            score,
+            comment,
+            status,
+            create_time
+        ) values (
+            #{homeworkId},
+            #{studentId},
+            #{fileName},
+            #{submitTime},
+            #{score},
+            #{comment},
+            #{status},
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateStuHomeworkSubmit" parameterType="StuHomeworkSubmit">
+        update stu_homework_submit
+        <set>
+            <if test="fileName != null and fileName != ''">file_name = #{fileName},</if>
+            score = #{score},
+            comment = #{comment},
+            <if test="status != null and status != ''">status = #{status},</if>
+            update_time = sysdate()
+        </set>
+        where submit_id = #{submitId}
+    </update>
+
+    <delete id="deleteStuHomeworkSubmitById" parameterType="Long">
+        delete from stu_homework_submit where submit_id = #{submitId}
+    </delete>
+
+    <select id="selectHomeworkSubmitWithAllStudents" parameterType="StuHomeworkSubmit" resultMap="StuHomeworkSubmitResult">
+        select s.submit_id, s.homework_id, st.student_id, s.file_name,
+               CONCAT(h.storage_path, '/', s.file_name) as file_path,
+               s.submit_time, s.score, s.comment, s.status,
+               s.create_time, s.update_time,
+               st.student_name, st.account, h.title as homework_title
+        from stu_student st
+        left join stu_homework_submit s on s.student_id = st.student_id and s.homework_id = #{homeworkId}
+        left join stu_homework h on h.homework_id = #{homeworkId}
+        where st.del_flag = '0'
+        <if test="admissionYear != null"> AND st.admission_year = #{admissionYear} </if>
+        <if test="classNum != null"> AND st.class_num = #{classNum} </if>
+        <if test="studentName != null and studentName != ''"> AND st.student_name like concat('%', #{studentName}, '%') </if>
+        order by st.student_num asc
+    </select>
+
+    <delete id="deleteStuHomeworkSubmitByIds">
+        delete from stu_homework_submit where submit_id in
+        <foreach item="submitId" collection="array" open="(" separator="," close=")">
+            #{submitId}
+        </foreach>
+    </delete>
+
+</mapper>

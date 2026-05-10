@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FileDirPermissionMapper">
+
+    <resultMap type="com.ruoyi.system.domain.SysRoleFileDir" id="SysRoleFileDirResult">
+        <id     property="roleId"       column="role_id"      />
+        <id     property="dirId"        column="dir_id"       />
+        <result property="canView"      column="can_view"     />
+        <result property="canDownload"  column="can_download" />
+        <result property="canUpload"    column="can_upload"   />
+        <result property="canDelete"    column="can_delete"   />
+    </resultMap>
+
+    <!-- 根据用户ID和目录路径查询权限 -->
+    <select id="selectPermissionByUserAndPath" resultMap="SysRoleFileDirResult">
+        SELECT rfd.role_id, rfd.dir_id, rfd.can_view, rfd.can_download, rfd.can_upload, rfd.can_delete
+        FROM sys_role_file_dir rfd
+        INNER JOIN sys_user_role ur ON rfd.role_id = ur.role_id
+        INNER JOIN sys_file_dir fd ON rfd.dir_id = fd.dir_id
+        WHERE ur.user_id = #{userId}
+          AND fd.path = #{path}
+        LIMIT 1
+    </select>
+
+    <!-- 根据角色ID和目录ID查询权限 -->
+    <select id="selectPermissionByRoleAndDir" resultMap="SysRoleFileDirResult">
+        SELECT role_id, dir_id, can_view, can_download, can_upload, can_delete
+        FROM sys_role_file_dir
+        WHERE role_id = #{roleId} AND dir_id = #{dirId}
+    </select>
+
+    <!-- 根据目录ID查询所有角色权限 -->
+    <select id="selectPermissionsByDirId" resultMap="SysRoleFileDirResult">
+        SELECT role_id, dir_id, can_view, can_download, can_upload, can_delete
+        FROM sys_role_file_dir
+        WHERE dir_id = #{dirId}
+    </select>
+
+    <!-- 根据角色ID查询所有目录权限 -->
+    <select id="selectPermissionsByRoleId" resultMap="SysRoleFileDirResult">
+        SELECT rfd.role_id, rfd.dir_id, rfd.can_view, rfd.can_download, rfd.can_upload, rfd.can_delete,
+               fd.dir_name, fd.path
+        FROM sys_role_file_dir rfd
+        INNER JOIN sys_file_dir fd ON rfd.dir_id = fd.dir_id
+        WHERE rfd.role_id = #{roleId}
+    </select>
+
+    <!-- 插入权限记录 -->
+    <insert id="insertPermission">
+        INSERT INTO sys_role_file_dir (role_id, dir_id, can_view, can_download, can_upload, can_delete)
+        VALUES (#{roleId}, #{dirId}, #{canView}, #{canDownload}, #{canUpload}, #{canDelete})
+    </insert>
+
+    <!-- 更新权限记录 -->
+    <update id="updatePermission">
+        UPDATE sys_role_file_dir
+        SET can_view = #{canView},
+            can_download = #{canDownload},
+            can_upload = #{canUpload},
+            can_delete = #{canDelete}
+        WHERE role_id = #{roleId} AND dir_id = #{dirId}
+    </update>
+
+    <!-- 删除权限记录 -->
+    <delete id="deletePermission">
+        DELETE FROM sys_role_file_dir
+        WHERE role_id = #{roleId} AND dir_id = #{dirId}
+    </delete>
+
+    <!-- 批量删除权限记录 -->
+    <delete id="batchDeletePermissions">
+        DELETE FROM sys_role_file_dir
+        WHERE role_id = #{roleId} AND dir_id IN
+        <foreach collection="dirIds" item="dirId" open="(" separator="," close=")">
+            #{dirId}
+        </foreach>
+    </delete>
+
+    <!-- 检查权限记录是否存在 -->
+    <select id="checkPermissionExists" resultType="Integer">
+        SELECT COUNT(1) FROM sys_role_file_dir
+        WHERE role_id = #{roleId} AND dir_id = #{dirId}
+    </select>
+
+    <!-- 根据用户ID查询角色ID列表 -->
+    <select id="selectRoleIdsByUserId" resultType="Long">
+        SELECT role_id FROM sys_user_role WHERE user_id = #{userId}
+    </select>
+
+</mapper>

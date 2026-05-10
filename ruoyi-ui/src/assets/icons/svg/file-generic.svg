@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="10" y="8" width="44" height="48" rx="6" fill="#ffffff" stroke="#dcdfe6"/>
+  <path d="M42 8v10a4 4 0 0 0 4 4h8" fill="#f2f4f8"/>
+  <rect x="15" y="16" width="18" height="26" rx="3" fill="#909399"/>
+  <text x="24" y="33" text-anchor="middle" font-family="Segoe UI, Arial" font-size="8" font-weight="700" fill="#fff">FILE</text>
+  <rect x="36" y="26" width="14" height="2.2" rx="1" fill="#c0c4cc"/>
+  <rect x="36" y="31" width="12" height="2.2" rx="1" fill="#c0c4cc"/>
+  <rect x="36" y="36" width="9" height="2.2" rx="1" fill="#c0c4cc"/>
+</svg>

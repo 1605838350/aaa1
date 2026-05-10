@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysFileDirMapper">
+    
+    <resultMap type="SysFileDir" id="SysFileDirResult">
+        <result property="dirId"    column="dir_id"    />
+        <result property="dirName"    column="dir_name"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="path"    column="path"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="perms"    column="perms"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSysFileDirVo">
+        select dir_id, dir_name, parent_id, path, order_num, perms, status, create_by, create_time, update_by, update_time, remark from sys_file_dir
+    </sql>
+
+    <select id="selectSysFileDirList" parameterType="SysFileDir" resultMap="SysFileDirResult">
+        <include refid="selectSysFileDirVo"/>
+        <where>  
+            <if test="dirName != null  and dirName != ''"> and dir_name like concat('%', #{dirName}, '%')</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="path != null  and path != ''"> and path = #{path}</if>
+            <if test="orderNum != null "> and order_num = #{orderNum}</if>
+            <if test="perms != null  and perms != ''"> and perms = #{perms}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysFileDirByDirId" parameterType="Long" resultMap="SysFileDirResult">
+        <include refid="selectSysFileDirVo"/>
+        where dir_id = #{dirId}
+    </select>
+
+    <select id="selectDirById" parameterType="Long" resultMap="SysFileDirResult">
+        <include refid="selectSysFileDirVo"/>
+        where dir_id = #{dirId}
+    </select>
+
+    <insert id="insertSysFileDir" parameterType="SysFileDir" useGeneratedKeys="true" keyProperty="dirId">
+        insert into sys_file_dir
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dirName != null and dirName != ''">dir_name,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="path != null and path != ''">path,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="perms != null">perms,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dirName != null and dirName != ''">#{dirName},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="path != null and path != ''">#{path},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="perms != null">#{perms},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysFileDir" parameterType="SysFileDir">
+        update sys_file_dir
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dirName != null and dirName != ''">dir_name = #{dirName},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="path != null and path != ''">path = #{path},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="perms != null">perms = #{perms},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where dir_id = #{dirId}
+    </update>
+
+    <delete id="deleteSysFileDirByDirId" parameterType="Long">
+        delete from sys_file_dir where dir_id = #{dirId}
+    </delete>
+
+    <delete id="deleteSysFileDirByDirIds" parameterType="String">
+        delete from sys_file_dir where dir_id in 
+        <foreach item="dirId" collection="array" open="(" separator="," close=")">
+            #{dirId}
+        </foreach>
+    </delete>
+
+    <select id="selectChildrenByParentId" parameterType="Long" resultMap="SysFileDirResult">
+        <include refid="selectSysFileDirVo"/>
+        where parent_id = #{parentId}
+    </select>
+    
+    <select id="selectDirByPath" parameterType="String" resultMap="SysFileDirResult">
+        <include refid="selectSysFileDirVo"/>
+        where path = #{path}
+    </select>
+</mapper>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="10" y="8" width="44" height="48" rx="6" fill="#ffffff" stroke="#ece5cf"/>
+  <path d="M42 8v10a4 4 0 0 0 4 4h8" fill="#faf4df"/>
+  <rect x="15" y="16" width="18" height="26" rx="3" fill="#D4A017"/>
+  <text x="24" y="33" text-anchor="middle" font-family="Segoe UI, Arial" font-size="9" font-weight="700" fill="#fff">AUD</text>
+  <path d="M42 23v14a4 4 0 1 1-2-3.5V25l8-2v10a4 4 0 1 1-2-3.5v-6z" fill="#d9b75a"/>
+</svg>
